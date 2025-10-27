@@ -53,3 +53,19 @@ MIT — Úsalo, modifícalo y compártelo.
 - 🎵 **Audio retro (WebAudio)**: música simple + SFX (moneda, golpe).
 - 📦 **PWA offline**: `manifest.webmanifest` + `service-worker.js`.
 - 🧰 **Ajustes** en `settings.html` (tema, audio, controles).
+
+
+## Ñuble v5 (campaña)
+- 🛶 **Mini-juego de balsa** (scroll horizontal) en Río Ñuble — portal en capítulo 3.
+- 🗂️ **Coleccionables regionales** con **galería** (`andes/gallery.html`) y `data/collectibles.json`.
+- 🧭 **Mapa-mundo** (`andes/world.html`) con **fast-travel** a capítulos visitados.
+- 📜 **Misiones largas**: contador de **3 señales del bosque** (semillas/aves recogidas).
+- 🎵 **Música chiptune temática** por zona (cordillera/valle/río/bosque/costa).
+
+
+## Ñuble v6 (campaña)
+- 🎨 **Arte mejorado** en costa (arena con espuma y olas).
+- 🏅 **Logros**: balsa, señales del bosque, jefe, colección completa y campaña completa.
+- 🐚 **Jefe costero** (gólem de olas) en Cobquecura (cap. 5) — combátelo adjunto y vence con 3 golpes.
+- 🎵 **Música chiptune** ajustada por zona (misma API, secuencias más distintivas).
+- 📲 **PWA** ampliado: cachea páginas/recursos de la campaña.

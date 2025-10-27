@@ -252,6 +252,18 @@
       "y": 6,
       "to": "andes3",
       "hint": "⛩️ Seguir hacia el río Ñuble"
+    },
+    {
+      "type": "collectible",
+      "x": 11,
+      "y": 6,
+      "id": "seed_physalis"
+    },
+    {
+      "type": "collectible",
+      "x": 3,
+      "y": 6,
+      "id": "seed_albahaca"
     }
   ]
 }

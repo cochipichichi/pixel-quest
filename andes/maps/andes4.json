@@ -252,6 +252,12 @@
       "y": 3,
       "to": "andes5",
       "hint": "⛩️ Camino a Cobquecura"
+    },
+    {
+      "type": "collectible",
+      "x": 8,
+      "y": 5,
+      "id": "bird_chucao"
     }
   ]
 }

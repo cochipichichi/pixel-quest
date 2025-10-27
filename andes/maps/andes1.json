@@ -252,6 +252,12 @@
       "y": 10,
       "to": "andes2",
       "hint": "⛩️ Descender al valle"
+    },
+    {
+      "type": "collectible",
+      "x": 6,
+      "y": 2,
+      "id": "bird_condor"
     }
   ]
 }

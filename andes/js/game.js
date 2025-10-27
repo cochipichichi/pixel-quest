@@ -26,6 +26,62 @@ const assets = {
 };
 
 let sprites={};
+
+// Achievements
+function unlockAch(id){
+  const arr = JSON.parse(localStorage.getItem('andes.achievements')||'[]');
+  if(!arr.includes(id)){ arr.push(id); localStorage.setItem('andes.achievements', JSON.stringify(arr)); }
+}
+// Hook raft win flag into achievements
+if(localStorage.getItem('andes.raft')==='won'){ unlockAch('raft_won'); }
+
+
+// Música temática simple por capítulo
+const Music = (()=>{
+  let ctx, playing=false, id=null;
+  const themes = {
+    1:[392,440,494,523], // cordillera
+    2:[330,392,440,392], // valle
+    3:[262,294,330,294], // río
+    4:[349,392,349,330], // bosque
+    5:[294,330,349,330], // costa
+  };
+  function ensure(){ if(ctx) return; ctx = new (window.AudioContext||window.webkitAudioContext)(); }
+  function start(ch){
+    ensure(); stop();
+    const seq = themes[ch] || themes[1];
+    playing=true; let i=0;
+    function tick(){
+      if(!playing) return;
+      const o=ctx.createOscillator(); const g=ctx.createGain();
+      o.type='triangle'; o.frequency.value=seq[i%seq.length];
+      o.connect(g); g.connect(ctx.destination);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.12, ctx.currentTime+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.32);
+      o.start(); o.stop(ctx.currentTime+0.33);
+      i++; id=setTimeout(tick, 340);
+    }
+    tick();
+  }
+  function stop(){ if(!playing) return; playing=false; if(id) clearTimeout(id); id=null; }
+  return { start, stop };
+})();
+
+// Coleccionables
+function addCollectible(id){
+  const arr = JSON.parse(localStorage.getItem('andes.collect')||'[]');
+  if(!arr.includes(id)){ arr.push(id); localStorage.setItem('andes.collect', JSON.stringify(arr)); }
+}
+
+// Misiones largas (ej.: 3 señales del bosque)
+const Missions = (()=>{
+  const key='andes.missions';
+  function get(){ return JSON.parse(localStorage.getItem(key)||'{"forest_signs":0}'); }
+  function incForest(){ const m=get(); m.forest_signs=(m.forest_signs||0)+1; localStorage.setItem(key, JSON.stringify(m)); }
+  return { get, incForest };
+})();
+
 async function loadAssets(){ for(const [k,v] of Object.entries(assets)) sprites[k]=await loadImage(v); }
 
 const dialogEl = document.getElementById('dialog');
@@ -58,7 +114,7 @@ async function loadStory(id){
 
 let mapData=null;
 let player={x:4,y:2,img:null};
-let npcs=[], coins=[], portals=[];
+let npcs=[], coins=[], portals=[], collectibles=[], bosses=[];
 
 function isWalkable(x,y){
   if (x<0||y<0||x>=MAP_W||y>=MAP_H) return false;
@@ -68,12 +124,14 @@ function isWalkable(x,y){
 }
 
 function placeEntities(){
-  npcs.length=0; coins.length=0; portals.length=0;
+  npcs.length=0; coins.length=0; portals.length=0; collectibles.length=0;
   for(const e of mapData.entities||[]){
     if (e.type==='playerStart') { player.x=e.x; player.y=e.y; }
     else if (e.type==='npc') npcs.push({...e});
     else if (e.type==='coin') coins.push({...e, taken:false});
     else if (e.type==='portal') portals.push({...e});
+    else if (e.type==='collectible') collectibles.push({...e, taken:false});
+    else if (e.type==='boss') bosses.push({...e, hp:3, active:true});
   }
 }
 
@@ -85,18 +143,21 @@ function draw(){
     }
   }
   for(const c of coins) if(!c.taken) ctx.drawImage(sprites.coin, c.x*TILE, c.y*TILE);
+  for(const k of collectibles) if(!k.taken) ctx.drawImage(sprites.coin, k.x*TILE, k.y*TILE);
   for(const n of npcs){
     let img = sprites.npc;
     if (n.id==='condor' || n.id==='condor_final') img = sprites.condor;
     if (n.id==='fisher') img = sprites.fisher;
     ctx.drawImage(img, n.x*TILE, n.y*TILE);
   }
+  for(const b of bosses){ if(b.active){ ctx.drawImage(sprites['boss_wave'], b.x*TILE, b.y*TILE); } }
   ctx.drawImage(player.img, player.x*TILE, player.y*TILE);
 
   // HUD
   ctx.fillStyle='#000a'; ctx.fillRect(0,0,256,12);
   ctx.fillStyle='#fff'; ctx.font='10px monospace';
-  ctx.fillText('Capítulo:'+progress.chapter+'  Monedas:'+progress.coins, 4,10);
+  const m = JSON.parse(localStorage.getItem('andes.missions')||'{"forest_signs":0}');
+  ctx.fillText('Capítulo:'+progress.chapter+'  Monedas:'+progress.coins+'  Señales bosque:'+m.forest_signs+'/3', 4,10);
 }
 
 let keys={};
@@ -114,6 +175,8 @@ function update(){
   if((dx||dy) && isWalkable(nx,ny)){ player.x=nx; player.y=ny; saveProgress(); }
   // coin pickup
   for(const c of coins){ if(!c.taken && c.x===player.x && c.y===player.y){ c.taken=true; progress.coins++; saveProgress(); } }
+  for(const k of collectibles){ if(!k.taken && k.x===player.x && k.y===player.y){ k.taken=true; addCollectible(k.id); if(k.id.includes('bird')||k.id.includes('seed')) Missions.incForest(); saveProgress(); }}
+  const m=JSON.parse(localStorage.getItem('andes.missions')||'{"forest_signs":0}'); if(m.forest_signs>=3) unlockAch('forest_signs_complete'); const all=JSON.parse(localStorage.getItem('andes.collect')||'[]'); const total=5; if(all.length>=total) unlockAch('all_collectibles');
   draw();
   requestAnimationFrame(update);
 }
@@ -132,6 +195,15 @@ function loadProgress(){
 function adjacent(a,b){ return Math.abs(a.x-b.x)+Math.abs(a.y-b.y)===1; }
 
 function interact(){
+  // Boss fight check
+  for(const b of bosses){
+    if(b.active && Math.abs(b.x-player.x)+Math.abs(b.y-player.y)===1){
+      b.hp -= 1;
+      if(b.hp<=0){ b.active=false; unlockAch('boss_defeated'); }
+      else { say('🌊 El gólem resiste... ('+b.hp+' ❤ restantes)', [{label:'Seguir', onSelect:()=>hideDialog()}]); return; }
+    }
+  }
+
   for(const n of npcs){
     if(adjacent(player,n)){
       if(n.id==='condor') say('🦅 Cóndor: Desciende con respeto por la montaña.', [{label:'Seguir', onSelect:()=>hideDialog()}]);
@@ -151,6 +223,7 @@ function interact(){
       // move to next chapter
       if(p.to==='andes2') loadChapter(2);
       if(p.to==='andes3') loadChapter(3);
+      if(p.to==='raft'){ location.href='raft.html'; return; }
       if(p.to==='andes4') loadChapter(4);
       if(p.to==='andes5') loadChapter(5);
       if(p.to==='andes1') loadChapter(1);
@@ -160,6 +233,9 @@ function interact(){
 }
 
 async function loadChapter(n){
+  Music.start(n);
+  if(n===5){ const ach=JSON.parse(localStorage.getItem('andes.achievements')||'[]'); if(ach.includes('boss_defeated')) unlockAch('campaign_complete'); }
+  let visited = JSON.parse(localStorage.getItem('andes.visited')||'[]'); if(!visited.includes(n)){ visited.push(n); localStorage.setItem('andes.visited', JSON.stringify(visited)); }
   progress.chapter=n;
   mapData = await loadMap(n);
   placeEntities();

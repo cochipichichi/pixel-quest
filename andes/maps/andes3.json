@@ -253,6 +253,13 @@
       "to": "andes4",
       "need": "coin",
       "hint": "⛩️ Mostrar moneda para cruzar"
+    },
+    {
+      "type": "portal",
+      "x": 7,
+      "y": 5,
+      "to": "raft",
+      "hint": "🛶 Intentar cruce en balsa"
     }
   ]
 }

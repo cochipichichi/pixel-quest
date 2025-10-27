@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ñuble — Mini-juego Balsa</title>
+  <meta name="theme-color" content="#0b0f14">
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<header class="top colorful">
+  <h1>🛶 Balsa en el Río Ñuble</h1>
+  <nav>
+    <a href="game.html" class="btn">Volver al capítulo</a>
+  </nav>
+</header>
+<main class="container">
+  <section class="game-wrap card">
+    <canvas id="river" width="320" height="180" aria-label="Mini-juego de balsa"></canvas>
+    <div class="legend">
+      <p>Controles: ⬅️⬆️⬇️➡️ para esquivar troncos y rocas. Llega al final sin chocar 3 veces.</p>
+    </div>
+  </section>
+</main>
+<footer class="foot">Gana para desbloquear el cruce del capítulo.</footer>
+<script type="module" src="js/raft.js"></script>
+</body>
+</html>

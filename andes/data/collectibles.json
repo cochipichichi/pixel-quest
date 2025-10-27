@@ -1,0 +1,39 @@
+{
+  "items": [
+    {
+      "id": "seed_physalis",
+      "name": "Semilla de Physalis",
+      "type": "semilla",
+      "desc": "Aguaymanto, fruto dorado andino.",
+      "chapter": 2
+    },
+    {
+      "id": "fossil_shell",
+      "name": "Fósil de Concha",
+      "type": "fósil",
+      "desc": "Registro marino en sedimentos costeros.",
+      "chapter": 5
+    },
+    {
+      "id": "bird_chucao",
+      "name": "Ave Chucao",
+      "type": "ave",
+      "desc": "Canto potente del bosque templado.",
+      "chapter": 4
+    },
+    {
+      "id": "seed_albahaca",
+      "name": "Semilla de Albahaca",
+      "type": "semilla",
+      "desc": "Aromática usada en huertos del valle.",
+      "chapter": 2
+    },
+    {
+      "id": "bird_condor",
+      "name": "Cóndor Andino (pluma)",
+      "type": "ave",
+      "desc": "Símbolo de la cordillera.",
+      "chapter": 1
+    }
+  ]
+}
