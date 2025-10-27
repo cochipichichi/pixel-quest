@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Quest — Capítulo 1</title>
+  <meta name="theme-color" content="#0b0f14">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>🗺️ Capítulo 1 · El Bosque de Ñuble</h1>
+    <nav>
+      <a href="index.html" class="btn">Cambiar personaje</a>
+      <button id="reset" class="btn">Reiniciar</button>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="game-wrap card">
+      <canvas id="game" width="256" height="192" aria-label="Mapa de juego"></canvas>
+      <div id="dialog" class="dialog hidden" role="dialog" aria-live="polite">
+        <p id="dialog-text"></p>
+        <div id="choices" class="choices"></div>
+      </div>
+      <div class="legend">
+        <p>Controles: ⬅️⬆️⬇️➡️ Mover · <kbd>Espacio</kbd> Hablar</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="foot">Progreso guardado automáticamente (localStorage)</footer>
+
+  <script type="module" src="js/game.js"></script>
+</body>
+</html>

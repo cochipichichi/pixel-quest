@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Quest — Selector de Personaje</title>
+  <meta name="theme-color" content="#0b0f14">
+  <link rel="icon" href="favicon.ico">
+  <link rel="preload" href="assets/style.css" as="style">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <header class="top">
+    <h1>🕹️ Pixel&nbsp;Quest</h1>
+    <nav>
+      <a href="index.html" class="btn">Inicio</a>
+      <a href="game.html" class="btn">Jugar</a>
+      <a href="credits.html" class="btn">Créditos</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <h2>Elige tu personaje</h2>
+      <div class="grid characters">
+        <button class="char" data-id="hero_blue">
+          <img src="assets/sprites/hero_blue.png" alt="Héroe Azul" />
+          <span>Héroe Azul</span>
+        </button>
+        <button class="char" data-id="hero_red">
+          <img src="assets/sprites/hero_red.png" alt="Héroe Rojo" />
+          <span>Héroe Rojo</span>
+        </button>
+        <button class="char" data-id="hero_green">
+          <img src="assets/sprites/hero_green.png" alt="Héroe Verde" />
+          <span>Héroe Verde</span>
+        </button>
+      </div>
+      <div class="actions">
+        <button id="play" class="btn primary">Comenzar historia ▶</button>
+      </div>
+      <p class="hint">Tu selección se guarda automáticamente en este navegador.</p>
+    </section>
+
+    <section class="card">
+      <h3>¿De qué trata?</h3>
+      <p>
+        Recorre un pequeño mapa, habla con personajes y toma decisiones.
+        Tus elecciones cambian el curso de la historia.
+      </p>
+    </section>
+  </main>
+
+  <footer class="foot">Hecho con ❤️ por Pancho & Belén — Pixel Quest</footer>
+
+  <script type="module" src="js/select.js"></script>
+</body>
+</html>
