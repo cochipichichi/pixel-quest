@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pixel Quest — Editor de Mapas</title>
+  <meta name="theme-color" content="#0b0f14">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<header class="top">
+  <h1>🧰 Editor de Mapas</h1>
+  <nav>
+    <a href="index.html" class="btn">Inicio</a>
+    <button id="newMap" class="btn">Nuevo</button>
+    <button id="loadCh1" class="btn">Cargar Cap. 1</button>
+    <button id="loadCh2" class="btn">Cargar Cap. 2</button>
+    <button id="export" class="btn primary">Exportar JSON</button>
+    <input type="file" id="import" accept="application/json" class="btn" />
+  </nav>
+</header>
+<main class="container">
+  <section class="card">
+    <div class="grid" style="grid-template-columns: 220px 1fr;">
+      <div>
+        <h3>Paleta</h3>
+        <div class="grid" style="grid-template-columns: repeat(2,1fr)">
+          <button class="btn tile" data-tile="0">🌿 Grass</button>
+          <button class="btn tile" data-tile="1">🛤 Path</button>
+          <button class="btn tile" data-tile="2">🌊 Water</button>
+          <button class="btn tile" data-tile="3">🌉 Bridge</button>
+        </div>
+        <h3 style="margin-top:12px">Entidades</h3>
+        <div class="grid" style="grid-template-columns: repeat(1,1fr)">
+          <button class="btn ent" data-ent="playerStart">🧍 Inicio jugador</button>
+          <button class="btn ent" data-ent="npc">💬 NPC</button>
+          <button class="btn ent" data-ent="enemy">👾 Enemigo</button>
+          <button class="btn ent" data-ent="coin">🟡 Moneda</button>
+          <button class="btn ent" data-ent="portal">⛩️ Portal</button>
+        </div>
+      </div>
+      <div>
+        <canvas id="canvas" width="256" height="192" style="width:768px;height:576px;border:1px solid #203040;image-rendering:pixelated"></canvas>
+        <p class="legend">Clic para pintar. Shift+clic elimina entidad. Exporta para guardar como <code>.json</code>.</p>
+      </div>
+    </div>
+  </section>
+</main>
+<script type="module" src="js/editor.js"></script>
+</body>
+</html>

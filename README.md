@@ -37,3 +37,9 @@ pixel-quest-repo/
 
 ## Licencia
 MIT — Úsalo, modifícalo y compártelo.
+
+
+## Novedades v2
+- **Capítulo 2: Puente Viejo** con enemigo que patrulla y monedas.
+- **Editor visual de mapas** (`editor.html`) para pintar tiles y colocar entidades (NPC, enemigo, portal, etc.).
+- Mapas externos en `/maps/*.json` — listos para versionar/compartir.
