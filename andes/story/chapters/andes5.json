@@ -1,0 +1,21 @@
+{
+  "id": "andes5",
+  "nodes": [
+    {
+      "id": "start",
+      "text": "🌊 Cóndor: Desde la costa, recuerda el viaje. Has cruzado Ñuble.",
+      "choices": [
+        {
+          "label": "Finalizar travesía",
+          "next": "end",
+          "flag": "finish_andes"
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "text": "La bruma marina te abraza. Fin… ¿o nuevo comienzo?",
+      "choices": []
+    }
+  ]
+}

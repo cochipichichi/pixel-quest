@@ -1,0 +1,35 @@
+{
+  "id": "andes3",
+  "nodes": [
+    {
+      "id": "start",
+      "text": "🎣 Pescador: Con una moneda, te dejo pasar por el cruce.",
+      "choices": [
+        {
+          "label": "Tengo una",
+          "next": "pass"
+        },
+        {
+          "label": "Volver a buscar",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "pass",
+      "text": "¡Listo! Cruza sin miedo.",
+      "choices": [
+        {
+          "label": "Gracias",
+          "next": "end",
+          "flag": "paid_fisher"
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "text": "El puente cruje, el río canta.",
+      "choices": []
+    }
+  ]
+}

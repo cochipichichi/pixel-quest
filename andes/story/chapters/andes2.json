@@ -1,0 +1,20 @@
+{
+  "id": "andes2",
+  "nodes": [
+    {
+      "id": "start",
+      "text": "⛰️ Baquiano: El valle es generoso, pero el bosque prueba tu orientación.",
+      "choices": [
+        {
+          "label": "Seguir sendero",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "text": "Escuchas el rumor del río Ñuble.",
+      "choices": []
+    }
+  ]
+}

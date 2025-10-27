@@ -1,0 +1,21 @@
+{
+  "id": "andes4",
+  "nodes": [
+    {
+      "id": "start",
+      "text": "🌲 Guardabosque: El bosque cuida a quien lo cuida.",
+      "choices": [
+        {
+          "label": "Prometer respeto",
+          "next": "end",
+          "flag": "respect_forest"
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "text": "Encuentras el sendero antiguo hacia la costa.",
+      "choices": []
+    }
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "andes1",
+  "nodes": [
+    {
+      "id": "start",
+      "text": "🦅 Cóndor: Desde la cordillera, mira el valle. ¿Listo para descender?",
+      "choices": [
+        {
+          "label": "Sí, guía mi vuelo",
+          "next": "go",
+          "flag": "andes_start"
+        }
+      ]
+    },
+    {
+      "id": "go",
+      "text": "Sigue la senda rocosa. Recoge una moneda como recuerdo.",
+      "choices": [
+        {
+          "label": "Ok",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "text": "El viento helado te impulsa hacia el valle.",
+      "choices": []
+    }
+  ]
+}
