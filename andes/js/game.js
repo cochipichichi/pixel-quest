@@ -27,6 +27,15 @@ const assets = {
 
 let sprites={};
 
+// Achievements
+function unlockAch(id){
+  const arr = JSON.parse(localStorage.getItem('andes.achievements')||'[]');
+  if(!arr.includes(id)){ arr.push(id); localStorage.setItem('andes.achievements', JSON.stringify(arr)); }
+}
+// Hook raft win flag into achievements
+if(localStorage.getItem('andes.raft')==='won'){ unlockAch('raft_won'); }
+
+
 // Música temática simple por capítulo
 const Music = (()=>{
   let ctx, playing=false, id=null;
@@ -105,7 +114,7 @@ async function loadStory(id){
 
 let mapData=null;
 let player={x:4,y:2,img:null};
-let npcs=[], coins=[], portals=[], collectibles=[];
+let npcs=[], coins=[], portals=[], collectibles=[], bosses=[];
 
 function isWalkable(x,y){
   if (x<0||y<0||x>=MAP_W||y>=MAP_H) return false;
@@ -122,6 +131,7 @@ function placeEntities(){
     else if (e.type==='coin') coins.push({...e, taken:false});
     else if (e.type==='portal') portals.push({...e});
     else if (e.type==='collectible') collectibles.push({...e, taken:false});
+    else if (e.type==='boss') bosses.push({...e, hp:3, active:true});
   }
 }
 
@@ -140,6 +150,7 @@ function draw(){
     if (n.id==='fisher') img = sprites.fisher;
     ctx.drawImage(img, n.x*TILE, n.y*TILE);
   }
+  for(const b of bosses){ if(b.active){ ctx.drawImage(sprites['boss_wave'], b.x*TILE, b.y*TILE); } }
   ctx.drawImage(player.img, player.x*TILE, player.y*TILE);
 
   // HUD
@@ -164,7 +175,8 @@ function update(){
   if((dx||dy) && isWalkable(nx,ny)){ player.x=nx; player.y=ny; saveProgress(); }
   // coin pickup
   for(const c of coins){ if(!c.taken && c.x===player.x && c.y===player.y){ c.taken=true; progress.coins++; saveProgress(); } }
-  for(const k of collectibles){ if(!k.taken && k.x===player.x && k.y===player.y){ k.taken=true; addCollectible(k.id); if(k.id.includes('bird')||k.id.includes('seed')) Missions.incForest(); saveProgress(); } }
+  for(const k of collectibles){ if(!k.taken && k.x===player.x && k.y===player.y){ k.taken=true; addCollectible(k.id); if(k.id.includes('bird')||k.id.includes('seed')) Missions.incForest(); saveProgress(); }}
+  const m=JSON.parse(localStorage.getItem('andes.missions')||'{"forest_signs":0}'); if(m.forest_signs>=3) unlockAch('forest_signs_complete'); const all=JSON.parse(localStorage.getItem('andes.collect')||'[]'); const total=5; if(all.length>=total) unlockAch('all_collectibles');
   draw();
   requestAnimationFrame(update);
 }
@@ -183,6 +195,15 @@ function loadProgress(){
 function adjacent(a,b){ return Math.abs(a.x-b.x)+Math.abs(a.y-b.y)===1; }
 
 function interact(){
+  // Boss fight check
+  for(const b of bosses){
+    if(b.active && Math.abs(b.x-player.x)+Math.abs(b.y-player.y)===1){
+      b.hp -= 1;
+      if(b.hp<=0){ b.active=false; unlockAch('boss_defeated'); }
+      else { say('🌊 El gólem resiste... ('+b.hp+' ❤ restantes)', [{label:'Seguir', onSelect:()=>hideDialog()}]); return; }
+    }
+  }
+
   for(const n of npcs){
     if(adjacent(player,n)){
       if(n.id==='condor') say('🦅 Cóndor: Desciende con respeto por la montaña.', [{label:'Seguir', onSelect:()=>hideDialog()}]);
@@ -213,6 +234,7 @@ function interact(){
 
 async function loadChapter(n){
   Music.start(n);
+  if(n===5){ const ach=JSON.parse(localStorage.getItem('andes.achievements')||'[]'); if(ach.includes('boss_defeated')) unlockAch('campaign_complete'); }
   let visited = JSON.parse(localStorage.getItem('andes.visited')||'[]'); if(!visited.includes(n)){ visited.push(n); localStorage.setItem('andes.visited', JSON.stringify(visited)); }
   progress.chapter=n;
   mapData = await loadMap(n);
