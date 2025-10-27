@@ -26,3 +26,30 @@ body{margin:0;font-family:system-ui,Segoe UI,Roboto,Ubuntu,sans-serif;background
 .choices .btn{font-size:14px}
 .legend{color:#a0b8d0}
 kbd{background:#1a2532;border:1px solid #2a3a52;border-radius:6px;padding:2px 6px}
+
+/* v3 colorful & themes */
+:root{
+  --bg:#0b0f14;--card:#11161d;--ink:#e9f2ff;--muted:#9bb3cf;
+  --brand:#7ad8ff;--accent:#b8ff9f;--accent2:#ffa8e6;--accent3:#ffd37a;
+}
+body.theme-contrast{--bg:#000;--card:#000;--ink:#fff;--muted:#ddd;--brand:#00ffff;--accent:#ffff00;--accent2:#ff00ff;--accent3:#ff8800}
+body.theme-sunset{--bg:#0a0614;--card:#130a1f;--ink:#ffeefb;--muted:#f0c7e6;--brand:#ff7ad9;--accent:#ffd37a;--accent2:#a5faff;--accent3:#b8ff9f}
+
+.top.colorful{background:linear-gradient(90deg,#132a3a,#1a0f2a);border-bottom:1px solid #23324a; position:sticky; top:0; z-index:2}
+.hero{background: radial-gradient(1200px 400px at 0% -10%, #1d2a40aa 0%, transparent 60%), linear-gradient(180deg,#131a25,#0e1218); border-image: linear-gradient(180deg, var(--brand), var(--accent2)) 1}
+.cta .btn.big{font-size:18px; padding:14px 18px}
+.btn.primary{background:linear-gradient(180deg,#0f2832,#0e1d27);border-color:#2a6b86;box-shadow:0 8px 24px #0008}
+.btn.primary.big{background:linear-gradient(180deg,#112f4a,#0f2133); border-color:#3e9bca}
+.char.active{outline:2px solid var(--accent2)}
+/* subtle pixel rain */
+body::before{
+  content:"";position:fixed;inset:0;pointer-events:none;
+  background: repeating-linear-gradient( to bottom, #ffffff08 0 2px, transparent 2px 8px);
+  mask-image: radial-gradient(transparent 0%, black 70%);
+}
+.theme-menu{position:absolute; right:16px; top:64px; background:var(--card); border:1px solid #253140; border-radius:12px; padding:8px; display:none}
+.theme-menu.open{display:block}
+.theme-menu button{width:100%; text-align:left; margin:4px 0}
+
+/* Quest panel */
+.dialog strong{color:var(--accent3)}

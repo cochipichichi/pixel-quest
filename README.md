@@ -43,3 +43,13 @@ MIT — Úsalo, modifícalo y compártelo.
 - **Capítulo 2: Puente Viejo** con enemigo que patrulla y monedas.
 - **Editor visual de mapas** (`editor.html`) para pintar tiles y colocar entidades (NPC, enemigo, portal, etc.).
 - Mapas externos en `/maps/*.json` — listos para versionar/compartir.
+
+
+## v3 — Qué se agregó
+- 🎨 **Index colorido** (temas: defecto, alto contraste, atardecer) y botón de tema.
+- 🌳 **Árbol narrativo** en `/story/chapters/*.json` (separación historia/motor).
+- 📜 **Quest Log** (misiones) con UI y persistencia.
+- ♿ **Accesibilidad**: remapeo de teclas (Flechas/WASD/ESDF), avanzar diálogos con Enter, alto contraste.
+- 🎵 **Audio retro (WebAudio)**: música simple + SFX (moneda, golpe).
+- 📦 **PWA offline**: `manifest.webmanifest` + `service-worker.js`.
+- 🧰 **Ajustes** en `settings.html` (tema, audio, controles).

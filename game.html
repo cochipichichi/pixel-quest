@@ -7,6 +7,7 @@
   <meta name="theme-color" content="#0b0f14">
   <link rel="icon" href="favicon.ico">
   <link rel="stylesheet" href="assets/style.css">
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
   <header class="top">
@@ -33,5 +34,6 @@
   <footer class="foot">Progreso guardado automáticamente (localStorage)</footer>
 
   <script type="module" src="js/game.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js');}</script>
 </body>
 </html>

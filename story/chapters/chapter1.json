@@ -1,0 +1,46 @@
+{
+  "id": "chapter1",
+  "nodes": [
+    {
+      "id": "start",
+      "text": "👤 Guardián: Bienvenido al bosque. ¿Qué buscas?",
+      "choices": [
+        {
+          "label": "🌱 Conocer el bosque",
+          "next": "learn",
+          "flag": "path_learn"
+        },
+        {
+          "label": "⚔️ Aventura",
+          "next": "adventure",
+          "flag": "path_adventure"
+        }
+      ]
+    },
+    {
+      "id": "learn",
+      "text": "🌿 Aprender es el primer paso. Encuentra los grabados al norte.",
+      "choices": [
+        {
+          "label": "Ok",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "adventure",
+      "text": "🔥 Al este te espera el viejo puente y un desafío.",
+      "choices": [
+        {
+          "label": "Ok",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "text": "¡Sigue tu camino!",
+      "choices": []
+    }
+  ]
+}

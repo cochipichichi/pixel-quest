@@ -3,23 +3,36 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pixel Quest — Selector de Personaje</title>
+  <title>Pixel Quest v3 — Selector de Personaje</title>
   <meta name="theme-color" content="#0b0f14">
   <link rel="icon" href="favicon.ico">
   <link rel="preload" href="assets/style.css" as="style">
   <link rel="stylesheet" href="assets/style.css">
+<link rel="manifest" href="manifest.webmanifest">
 </head>
 <body>
-  <header class="top">
+  <header class="top colorful">
     <h1>🕹️ Pixel&nbsp;Quest</h1>
     <nav>
       <a href="index.html" class="btn">Inicio</a>
       <a href="game.html" class="btn">Jugar</a>
       <a href="credits.html" class="btn">Créditos</a>
-    <a href="editor.html" class="btn">Editor</a></nav>
+    <a href="editor.html" class="btn">Editor</a><a href="settings.html" class="btn">Ajustes</a>
+      <button id="themeToggle" class="btn">🌈 Tema</button>
+    </nav>
   </header>
 
   <main class="container">
+
+  <section class="hero card">
+    <h2>🎨 ¡Elige tu estilo y aventúrate!</h2>
+    <p>Arte pixel, decisiones ramificadas, capítulos y editor de mapas. ¡Ahora con audio retro, log de misiones y PWA offline!</p>
+    <div class="cta">
+      <a class="btn primary big" href="game.html">Jugar ahora ▶</a>
+      <a class="btn big" href="editor.html">Abrir Editor</a>
+    </div>
+  </section>
+
     <section class="card">
       <h2>Elige tu personaje</h2>
       <div class="grid characters">
@@ -54,5 +67,6 @@
   <footer class="foot">Hecho con ❤️ por Pancho & Belén — Pixel Quest</footer>
 
   <script type="module" src="js/select.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js');}</script>
 </body>
 </html>

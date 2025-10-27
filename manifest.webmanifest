@@ -1,0 +1,15 @@
+{
+  "name": "Pixel Quest v3",
+  "short_name": "PixelQuest",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#0b0f14",
+  "theme_color": "#0b0f14",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "32x32",
+      "type": "image/x-icon"
+    }
+  ]
+}

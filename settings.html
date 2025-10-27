@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ajustes — Pixel Quest v3</title>
+  <meta name="theme-color" content="#0b0f14">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/style.css">
+<link rel="manifest" href="manifest.webmanifest">
+</head>
+<body>
+<header class="top">
+  <h1>⚙️ Ajustes</h1>
+  <nav>
+    <a href="index.html" class="btn">Inicio</a>
+  </nav>
+</header>
+<main class="container">
+  <section class="card">
+    <h2>Controles</h2>
+    <div class="grid" style="grid-template-columns:repeat(2,1fr)">
+      <div>
+        <p>Movimiento:</p>
+        <label><input type="radio" name="layout" value="arrows"> Flechas (⬅️⬆️⬇️➡️)</label><br/>
+        <label><input type="radio" name="layout" value="wasd"> WASD</label><br/>
+        <label><input type="radio" name="layout" value="esdf"> ESDF</label>
+      </div>
+      <div>
+        <p>Acciones:</p>
+        <label>Hablar/Confirmar: <kbd>Espacio</kbd> / <kbd>Enter</kbd></label><br/>
+        <label><input type="checkbox" id="enableEnter"> Permitir avanzar diálogos con Enter</label>
+      </div>
+    </div>
+  </section>
+  <section class="card">
+    <h2>Audio</h2>
+    <label><input type="checkbox" id="music"> Música chiptune</label><br/>
+    <label><input type="checkbox" id="sfx"> Efectos</label><br/>
+    <label>Volumen: <input type="range" id="volume" min="0" max="1" step="0.01"></label>
+  </section>
+  <section class="card">
+    <h2>Accesibilidad</h2>
+    <button id="contrast" class="btn">⚡ Alto contraste</button>
+    <button id="sunset" class="btn">🌇 Tema atardecer</button>
+    <button id="default" class="btn">☀️ Tema por defecto</button>
+  </section>
+</main>
+<script type="module" src="js/settings.js"></script>
+<script>if('serviceWorker' in navigator){navigator.serviceWorker.register('service-worker.js');}</script>
+</body>
+</html>

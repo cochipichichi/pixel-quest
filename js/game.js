@@ -21,6 +21,70 @@ const assets = {
 };
 
 let sprites={};
+// --- Audio (WebAudio chiptune) ---
+const Audio = (()=>{
+  let ctx, master, musicGain, sfxGain; let playing=false;
+  function ensure(){
+    if(ctx) return; ctx = new (window.AudioContext||window.webkitAudioContext)();
+    master = ctx.createGain(); master.connect(ctx.destination);
+    musicGain = ctx.createGain(); musicGain.gain.value = Number(localStorage.getItem('pixelquest.settings.volume')||0.5);
+    sfxGain = ctx.createGain(); sfxGain.gain.value = Number(localStorage.getItem('pixelquest.settings.volume')||0.5);
+    musicGain.connect(master); sfxGain.connect(master);
+  }
+  function tone(freq, dur=0.2, destination=sfxGain){
+    ensure();
+    const o=ctx.createOscillator(); const g=ctx.createGain();
+    o.type='square'; o.frequency.value=freq;
+    o.connect(g); g.connect(destination);
+    g.gain.setValueAtTime(0.0001, ctx.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime+0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+dur);
+    o.start(); o.stop(ctx.currentTime+dur);
+  }
+  function playCoin(){ tone(880,0.15); }
+  function hit(){ tone(220,0.2); }
+  function musicStart(){
+    if(playing) return;
+    const allow = localStorage.getItem('pixelquest.settings.music')!=='0';
+    if(!allow) return;
+    ensure();
+    playing=true;
+    // simple looping melody
+    const seq=[440,494,523,587,523,494,440,392];
+    let i=0;
+    function step(){
+      if(!playing) return;
+      const o=ctx.createOscillator(); const g=ctx.createGain();
+      o.type='triangle'; o.frequency.value=seq[i%seq.length];
+      o.connect(g); g.connect(musicGain);
+      g.gain.setValueAtTime(0.0001, ctx.currentTime);
+      g.gain.exponentialRampToValueAtTime(0.15, ctx.currentTime+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime+0.35);
+      o.start(); o.stop(ctx.currentTime+0.36);
+      i++; setTimeout(step, 360);
+    }
+    step();
+  }
+  function musicStop(){ playing=false; }
+  return { playCoin, hit, musicStart, musicStop };
+})();
+
+// --- Quest Log ---
+const Quest = (()=>{
+  const key='pixelquest.quests';
+  function load(){ return JSON.parse(localStorage.getItem(key)||'[]'); }
+  function save(q){ localStorage.setItem(key, JSON.stringify(q)); }
+  function add(id, title){ const q=load(); if(!q.find(x=>x.id===id)){ q.push({id,title,done:false}); save(q); } }
+  function complete(id){ const q=load(); const it=q.find(x=>x.id===id); if(it){ it.done=true; save(q);} }
+  return { load, add, complete };
+})();
+
+// --- Story loader ----
+async function loadStory(chapter){
+  const res = await fetch('story/chapters/'+(chapter===2?'chapter2':'chapter1')+'.json');
+  return await res.json();
+}
+
 async function loadAssets(){ for(const [k,v] of Object.entries(assets)) sprites[k]=await loadImage(v); }
 
 const dialogEl = document.getElementById('dialog');
@@ -118,14 +182,14 @@ function update(){
     }
     // collision with player
     if (en.x===player.x && en.y===player.y){
-      state.hp=Math.max(0, state.hp-1);
+      state.hp=Math.max(0, state.hp-1); Audio.hit();
       if (state.hp===0){ say('💀 Te desmayaste. Volverás al inicio del capítulo.', [{label:'Reintentar', onSelect: ()=>{hideDialog(); placeEntities(); state.hp=3;}}]); }
     }
   }
 
   // coins
   for(const c of coins){
-    if(!c.taken && c.x===player.x && c.y===player.y){ c.taken=true; state.coins++; }
+    if(!c.taken && c.x===player.x && c.y===player.y){ c.taken=true; state.coins++; Audio.playCoin(); Quest.complete('getCoin'); renderQuests(); }
   }
 
   draw();
@@ -147,11 +211,13 @@ function loadProgress(){
 
 function adjacent(a,b){ return Math.abs(a.x-b.x)+Math.abs(a.y-b.y)===1; }
 
-function tryInteract(){
+function tryInteract(){ Audio.musicStart();
   // NPCs
   for (const n of npcs){
     if (adjacent(player, n)){
       if (n.id==='guide'){
+        // load chapter1 story
+        loadStory(1).then(st=>{ /* could use st.nodes; keeping simple for demo */ });
         say('👤 Guardián: Elige tu camino.', [
           {label:'🌱 Aprender', onSelect:()=>{hideDialog();}},
           {label:'⚔️ Aventurar', onSelect:()=>{hideDialog();}}
@@ -159,6 +225,7 @@ function tryInteract(){
         return;
       }
       if (n.id==='keeper'){
+        loadStory(2).then(st=>{});
         say('🛡️ Guardián del Puente: Reúne una moneda y cruza sin miedo.', [{label:'Ok', onSelect:()=>hideDialog()}]);
         return;
       }
@@ -179,7 +246,7 @@ async function loadChapter(num){
   saveProgress();
 }
 
-(async function main(){
+(async function main(){ Quest.add('getCoin','Consigue una moneda en el capítulo 2'); renderQuests(); Audio.musicStart(); 
   await loadAssets();
   player.img = sprites[heroKey];
   await loadChapter(progress.chapter||1);
@@ -187,3 +254,34 @@ async function loadChapter(num){
   draw();
   requestAnimationFrame(update);
 })();
+
+// HUD Quest panel (DOM created lazily)
+let questPanel;
+function ensureQuestPanel(){
+  if(questPanel) return;
+  questPanel = document.createElement('div');
+  questPanel.className='dialog';
+  questPanel.style.position='absolute';
+  questPanel.style.right='10px'; questPanel.style.top='40px'; questPanel.style.maxWidth='220px';
+  document.body.appendChild(questPanel);
+}
+function renderQuests(){
+  ensureQuestPanel();
+  const list = Quest.load();
+  questPanel.innerHTML = '<strong>Misiones</strong><ul style="padding-left:18px; margin:6px 0 0 0">'+
+    list.map(q=>'<li>'+ (q.done?'✅ ':'🟡 ') + q.title +'</li>').join('') + '</ul>';
+}
+
+// Input layout mapping
+const layout = localStorage.getItem('pixelquest.settings.layout')||'arrows';
+const KEYMAP = {
+  arrows: {left:'ArrowLeft', right:'ArrowRight', up:'ArrowUp', down:'ArrowDown'},
+  wasd:   {left:'a', right:'d', up:'w', down:'s'},
+  esdf:   {left:'s', right:'f', up:'e', down:'d'}
+}[layout];
+
+window.addEventListener('keydown', e=>{
+  if (advanceWithEnter && !dialogEl.classList.contains('hidden') && (e.key==='Enter')){
+    const first = choicesEl.querySelector('.btn'); if(first){ first.click(); e.preventDefault(); }
+  }
+});

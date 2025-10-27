@@ -1,0 +1,20 @@
+{
+  "id": "chapter2",
+  "nodes": [
+    {
+      "id": "start",
+      "text": "🛡️ Guardián del Puente: Cruza si demuestras valor (¡y recoge una moneda!).",
+      "choices": [
+        {
+          "label": "Entendido",
+          "next": "end"
+        }
+      ]
+    },
+    {
+      "id": "end",
+      "text": "El río ruge debajo del puente...",
+      "choices": []
+    }
+  ]
+}
